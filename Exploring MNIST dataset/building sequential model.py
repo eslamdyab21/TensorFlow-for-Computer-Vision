@@ -4,6 +4,25 @@ import numpy as np
 from tensorflow.keras.layers import Conv2D, Input, Dense, MaxPool2D, BatchNormalization, GlobalMaxPool2D
 from tensorflow.python.keras import activations
 
+# tensorflow.keras.Sequential
+model = tensorflow.keras.Sequential(
+    [
+        Input(shape=(28,28,1)),
+        Conv2D(32, (3,3), activation='relu'),
+        Conv2D(64, (3,3), activation='relu'),
+        MaxPool2D(),
+        BatchNormalization(),
+
+        Conv2D(128, (3,3), activation='relu'),
+        MaxPool2D(),
+        BatchNormalization(),
+
+        GlobalMaxPool2D(),
+        Dense(64, activation='relu'),
+        Dense(10, activation='softmax')
+    ]
+)
+
 def display_some_images(images,labels):
     plt.figure(figsize=(20,10))
 
@@ -44,3 +63,9 @@ if __name__=='__main__':
     print("y_train shape = ", y_train.shape)
     print("x_test shape = ", x_test.shape)
     print("x_test shape = ", x_test.shape)
+
+    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics='accuracy')
+
+    model.fit(x_train, y_train, batch_size=64, epochs=3, validation_split=0.2)
+
+    model.evaluate(x_test, y_test, batch_size=64)
