@@ -1,22 +1,8 @@
 import tensorflow
-import matplotlib.pyplot as plt
 import numpy as np
-from tensorflow.keras.layers import Conv2D, Input, Dense, MaxPool2D, BatchNormalization, GlobalMaxPool2D
-from tensorflow.python.keras import activations
+from display_some_images import display_some_images
+from deep_learning_functional_model import functional_model
 
-def display_some_images(images,labels):
-    plt.figure(figsize=(20,10))
-
-    for i in range(25):
-        idx = np.random.randint(0,images.shape[0])
-        img = images[idx]
-        label = labels[idx]
-
-        plt.subplot(5,5,i+1)
-        plt.title(str(label))
-        plt.tight_layout()
-        plt.imshow(img, cmap='gray')
-    plt.show()
 
 if __name__=='__main__':
 
@@ -44,3 +30,13 @@ if __name__=='__main__':
     print("y_train shape = ", y_train.shape)
     print("x_test shape = ", x_test.shape)
     print("x_test shape = ", x_test.shape)
+
+    model = functional_model()
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics='accuracy')
+
+
+    # model training
+    model.fit(x_train, y_train, batch_size=64, epochs=3, validation_split=0.2)
+
+    # Evaluation on test set
+    model.evaluate(x_test, y_test, batch_size=64)
